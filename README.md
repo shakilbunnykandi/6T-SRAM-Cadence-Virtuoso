@@ -1,44 +1,51 @@
-# 6T SRAM Cell Design and Stability Analysis 
+# 6T SRAM Cell Design and Stability Analysis
 
 ## 📌 Project Overview
-This repository contains the design, simulation, and stability analysis of a 6-Transistor (6T) SRAM (Static Random Access Memory) cell. The project was developed and simulated at the **Central Institute of Tool Design (CITD)** using industry-standard EDA tools to evaluate memory read/write stability and retention metrics.
+This repository contains the schematic design, DC simulation, and Static Noise Margin (SNM) stability analysis of a 6-Transistor (6T) SRAM cell. The project was implemented using **Cadence Virtuoso** and simulated using the **Spectre APS** simulator at the **Central Institute of Tool Design (CITD)**.
 
 ---
 
-## 🛠️ Tools & Technology
-* **EDA Tool:** Cadence Virtuoso (Schematic Editor & Analog Design Environment L)
+## 🛠️ Tools & Specifications
+* **EDA Tool:** Cadence Virtuoso (Schematic Editor & ADE L)
 * **Simulator:** Spectre APS
 * **Technology Node:** 45nm CMOS Process (`g45p1svt` / `g45n1svt`)
-* **Supply Voltage:** 1.8V
+* **Supply Voltage ($V_{DD}$):** 1.8V
+
+---
+
+## 📐 Circuit Schematic
+
+The standard 6T SRAM cell architecture consists of two cross-coupled CMOS inverters forming a bistable latch for data storage ($Q$ and $Qb$), alongside two NMOS access pass-transistors connected to Bitlines ($BL$ and $BLbar$) driven by the Wordline ($WL$).
+
+![SRAM Schematic](images/schematic.png)
+
+---
+
+## 📊 Simulation & Results
+
+### 1. DC Voltage Transfer Characteristics (VTC)
+A DC voltage sweep was performed on the internal storage nodes to analyze the inverter switching characteristics and logic transition behavior across the supply range ($0\text{ V}$ to $1.8\text{ V}$).
+
+![DC Analysis](images/dc_analysis.png)
+
+---
+
+### 2. Static Noise Margin (SNM) & Butterfly Curve
+The stability of the SRAM cell is evaluated using the Static Noise Margin (SNM). By superimposing the Voltage Transfer Characteristic (VTC) of the first inverter with the inverse VTC of the second inverter, the classic **Butterfly Curve** is obtained. 
+
+* The maximum square embedded within the lobes defines the SNM.
+* Symmetrical lobes confirm strong read/write stability and retention against operational noise.
+
+![Butterfly Curve](images/butterfly_curve.png)
 
 ---
 
 ## 📂 Repository Structure
-* **`images/`**: Contains high-resolution screenshots of the schematic design and simulation plots (VTC and Butterfly curves).
-* **`design/`**: Contains the exported Spectre netlist (`sram_netlist.scs`) for the memory cell.
-
----
-
-## 📐 Circuit Architecture
-The 6T SRAM cell is the fundamental building block of modern cache memory. The schematic implementation consists of:
-* **Cross-coupled Inverters (Storage):** Two PMOS pull-up transistors and two NMOS pull-down transistors form a bistable latch that holds the complementary memory states (Q and Qb).
-* **Access Transistors:** Two NMOS pass-transistors controlled by the Wordline (WL) connect the internal storage nodes to the Bitlines (BL and BLbar) for read and write operations.
-* **Transistor Sizing:** Careful consideration was given to the Cell Ratio (CR) and Pull-Up Ratio (PR) to ensure non-destructive reads and successful writes.
-
----
-
-## 📊 Simulation & Analysis
-
-### 1. DC Analysis & Voltage Transfer Characteristics (VTC)
-A rigorous DC voltage sweep was performed on the internal storage nodes (from 0V to 1.8V) using the Analog Design Environment (ADE L). This allowed for the observation of the switching thresholds and the voltage transfer characteristics of the internal inverters.
-
-### 2. Static Noise Margin (SNM) & The Butterfly Curve
-The primary metric for SRAM stability is the Static Noise Margin (SNM), which dictates the maximum amount of electrical noise the cell can tolerate before unintentionally flipping its state. 
-* The VTC of the first inverter was superimposed with the inverse VTC of the second inverter to generate the classic **Butterfly Curve**.
-* The symmetrical "eyes" of the butterfly plot confirm a robust and highly stable memory cell capable of retaining data under operational stress.
-
----
-
-## 🚀 How to View
-1. Navigate to the `images/` directory to view the Virtuoso schematic and the SNM simulation results.
-2. The `design/sram_netlist.scs` file can be opened in any text editor to view the SPICE/Spectre netlist representation of the circuit.
+```text
+├── images/
+│   ├── schematic.png
+│   ├── dc_analysis.png
+│   └── butterfly_curve.png
+├── design/
+│   └── sram_netlist.scs
+└── README.md
